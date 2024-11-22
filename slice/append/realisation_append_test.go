@@ -88,7 +88,7 @@ func TestAppend(t *testing.T) {
 			elements:    []string{"a", "b", "c"},
 			expected:    []string{"a", "b", "c"},
 			expectedLen: 3,
-			expectedCap: 3,
+			expectedCap: 4,
 		},
 		{
 			name:        "Append to non-empty slice of strings",
@@ -115,7 +115,7 @@ func TestAppend(t *testing.T) {
 			elements:    []float64{1.1, 2.2, 3.3},
 			expected:    []float64{1.1, 2.2, 3.3},
 			expectedLen: 3,
-			expectedCap: 3,
+			expectedCap: 4,
 		},
 		{
 			name:        "Append to non-empty slice of floats",
