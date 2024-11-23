@@ -26,6 +26,7 @@ func realisationCheck(checker Checker, t *testing.T) {
 
 func (test *TestCaseCopy[T]) Check(t *testing.T) {
 	t.Run(test.CaseNameTest, func(t *testing.T) {
+		t.Parallel()
 		c.Copy(test.List1, test.List2)
 		err := CheckSlice(test.List1, test.OutputList)
 		if err != nil {
