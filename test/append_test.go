@@ -1,6 +1,7 @@
-package main
+package test
 
 import (
+	a "Library/internal/slice/append"
 	"testing"
 )
 
@@ -137,7 +138,7 @@ func TestAppend(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Append(tt.input, tt.elements...)
+			result := a.Append(tt.input, tt.elements...)
 
 			if len(result) != tt.expectedLen {
 				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
@@ -157,7 +158,7 @@ func TestAppend(t *testing.T) {
 
 	for _, tt := range stringTests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Append(tt.input, tt.elements...)
+			result := a.Append(tt.input, tt.elements...)
 			if len(result) != tt.expectedLen {
 				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
 			}
@@ -174,7 +175,7 @@ func TestAppend(t *testing.T) {
 
 	for _, tt := range floatTests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Append(tt.input, tt.elements...)
+			result := a.Append(tt.input, tt.elements...)
 			if len(result) != tt.expectedLen {
 				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
 			}

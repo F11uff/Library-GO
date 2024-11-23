@@ -1,6 +1,7 @@
-package main
+package test
 
 import (
+	r "Library/internal/slice/remove"
 	"testing"
 )
 
@@ -19,7 +20,7 @@ func TestRemoveInt(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := Remove(tt.List, tt.Index)
+		result, err := r.Remove(tt.List, tt.Index)
 		if err != nil {
 			t.Errorf("%s: unexpected error: %v", tt.Name, err)
 			continue
@@ -29,7 +30,7 @@ func TestRemoveInt(t *testing.T) {
 		}
 	}
 
-	_, err := Remove([]int{1, 2, 3}, 5)
+	_, err := r.Remove([]int{1, 2, 3}, 5)
 	if err == nil || err.Error() != "error : Index out of range" {
 		t.Error("expected index out of range error, got:", err)
 	}
@@ -43,7 +44,7 @@ func TestRemoveFloat64(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := Remove(tt.List, tt.Index)
+		result, err := r.Remove(tt.List, tt.Index)
 		if err != nil {
 			t.Errorf("%s: unexpected error: %v", tt.Name, err)
 			continue
@@ -53,7 +54,7 @@ func TestRemoveFloat64(t *testing.T) {
 		}
 	}
 
-	_, err := Remove([]float64{1.1, 2.2, 3.3}, 5)
+	_, err := r.Remove([]float64{1.1, 2.2, 3.3}, 5)
 	if err == nil || err.Error() != "error : Index out of range" {
 		t.Error("expected index out of range error, got:", err)
 	}
@@ -67,7 +68,7 @@ func TestRemoveString(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := Remove(tt.List, tt.Index)
+		result, err := r.Remove(tt.List, tt.Index)
 		if err != nil {
 			t.Errorf("%s: unexpected error: %v", tt.Name, err)
 			continue
@@ -77,7 +78,7 @@ func TestRemoveString(t *testing.T) {
 		}
 	}
 
-	_, err := Remove([]string{"a", "b", "c"}, 5)
+	_, err := r.Remove([]string{"a", "b", "c"}, 5)
 	if err == nil || err.Error() != "error : Index out of range" {
 		t.Error("expected index out of range error, got:", err)
 	}
