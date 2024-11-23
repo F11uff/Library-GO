@@ -32,7 +32,7 @@ func (test *TestCaseCopy[T]) Check(t *testing.T) {
 			t.Errorf("Error : test fail - %s, List1 - %v, OutputList - %v", test.CaseNameTest, test.List1, test.OutputList)
 		} else if test.OutputLen != int64(len(test.List1)) {
 			t.Errorf("Error : len List1 - %v, OutputList - %v", len(test.List1), test.OutputLen)
-		} else if test.OutputCap != test.OutputCap {
+		} else if test.OutputCap != int64(cap(test.List1)) {
 			t.Errorf(" Error : cap List1 - %v, OutputList - %v", cap(test.List1), test.OutputCap)
 		}
 	})
