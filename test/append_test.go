@@ -6,15 +6,7 @@ import (
 	"testing"
 )
 
-type Checker2 interface {
-	Check2(t *testing.T)
-}
-
-func realisationCheck2(checker Checker2, t *testing.T) {
-	checker.Check2(t)
-}
-
-func (obj *AppendTestCase[T]) Check2(t *testing.T) {
+func (obj *AppendTestCase[T]) Check(t *testing.T) {
 	t.Run(obj.name, func(t *testing.T) {
 		t.Parallel()
 		result := a.Append(obj.input, obj.elements...)
@@ -167,14 +159,14 @@ func TestAppend(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		realisationCheck2(&tt, t)
+		realisationCheck(&tt, t)
 	}
 
 	for _, tt := range stringTests {
-		realisationCheck2(&tt, t)
+		realisationCheck(&tt, t)
 	}
 
 	for _, tt := range floatTests {
-		realisationCheck2(&tt, t)
+		realisationCheck(&tt, t)
 	}
 }

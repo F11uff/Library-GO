@@ -6,15 +6,7 @@ import (
 	"testing"
 )
 
-type Checker3 interface {
-	Check3(t *testing.T)
-}
-
-func realisationCheck3(t *testing.T, r Checker3) {
-	r.Check3(t)
-}
-
-func (test *TestCase[T]) Check3(t *testing.T) {
+func (test *TestCase[T]) Check(t *testing.T) {
 	result, err := r.Remove(test.List, test.Index)
 	if err != nil {
 		t.Errorf("%s: unexpected error: %v", test.Name, err)
@@ -50,7 +42,7 @@ func TestRemoveInt(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		realisationCheck3(t, &tt)
+		realisationCheck(&tt, t)
 	}
 
 	_, err := r.Remove([]int{1, 2, 3}, 5)
@@ -67,7 +59,7 @@ func TestRemoveFloat64(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		realisationCheck3(t, &tt)
+		realisationCheck(&tt, t)
 	}
 
 	_, err := r.Remove([]float64{1.1, 2.2, 3.3}, 5)
@@ -84,7 +76,7 @@ func TestRemoveString(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		realisationCheck3(t, &tt)
+		realisationCheck(&tt, t)
 	}
 
 	_, err := r.Remove([]string{"a", "b", "c"}, 5)
