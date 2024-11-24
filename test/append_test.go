@@ -2,10 +2,40 @@ package test
 
 import (
 	a "Library/internal/slice/append"
+	"golang.org/x/exp/constraints"
 	"testing"
 )
 
-type AppendTestCase[T any] struct {
+type Checker2 interface {
+	Check2(t *testing.T)
+}
+
+func realisationCheck2(checker Checker2, t *testing.T) {
+	checker.Check2(t)
+}
+
+func (obj *AppendTestCase[T]) Check2(t *testing.T) {
+	t.Run(obj.name, func(t *testing.T) {
+		t.Parallel()
+		result := a.Append(obj.input, obj.elements...)
+
+		if len(result) != obj.expectedLen {
+			t.Errorf("%s: expected length %d, got %d", obj.name, obj.expectedLen, len(result))
+		}
+
+		if cap(result) < obj.expectedCap {
+			t.Errorf("%s: expected capacity at least %d, got %d", obj.name, obj.expectedCap, cap(result))
+		}
+
+		for i := range obj.expected {
+			if result[i] != obj.expected[i] {
+				t.Errorf("%s: expected element at index %d to be %v, got %v", obj.name, i, obj.expected[i], result[i])
+			}
+		}
+	})
+}
+
+type AppendTestCase[T constraints.Ordered] struct {
 	name        string
 	input       []T
 	elements    []T
@@ -137,56 +167,14 @@ func TestAppend(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := a.Append(tt.input, tt.elements...)
-
-			if len(result) != tt.expectedLen {
-				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
-			}
-
-			if cap(result) < tt.expectedCap {
-				t.Errorf("%s: expected capacity at least %d, got %d", tt.name, tt.expectedCap, cap(result))
-			}
-
-			for i := range tt.expected {
-				if result[i] != tt.expected[i] {
-					t.Errorf("%s: expected element at index %d to be %v, got %v", tt.name, i, tt.expected[i], result[i])
-				}
-			}
-		})
+		realisationCheck2(&tt, t)
 	}
 
 	for _, tt := range stringTests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := a.Append(tt.input, tt.elements...)
-			if len(result) != tt.expectedLen {
-				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
-			}
-			if cap(result) < tt.expectedCap {
-				t.Errorf("%s: expected capacity at least %d, got %d", tt.name, tt.expectedCap, cap(result))
-			}
-			for i := range tt.expected {
-				if result[i] != tt.expected[i] {
-					t.Errorf("%s: expected element at index %d to be %v, got %v", tt.name, i, tt.expected[i], result[i])
-				}
-			}
-		})
+		realisationCheck2(&tt, t)
 	}
 
 	for _, tt := range floatTests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := a.Append(tt.input, tt.elements...)
-			if len(result) != tt.expectedLen {
-				t.Errorf("%s: expected length %d, got %d", tt.name, tt.expectedLen, len(result))
-			}
-			if cap(result) < tt.expectedCap {
-				t.Errorf("%s: expected capacity at least %d, got %d", tt.name, tt.expectedCap, cap(result))
-			}
-			for i := range tt.expected {
-				if result[i] != tt.expected[i] {
-					t.Errorf("%s: expected element at index %d to be %v, got %v", tt.name, i, tt.expected[i], result[i])
-				}
-			}
-		})
+		realisationCheck2(&tt, t)
 	}
 }

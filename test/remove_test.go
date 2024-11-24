@@ -2,10 +2,40 @@ package test
 
 import (
 	r "Library/internal/slice/remove"
+	"golang.org/x/exp/constraints"
 	"testing"
 )
 
-type TestCase[T any] struct {
+type Checker3 interface {
+	Check3(t *testing.T)
+}
+
+func realisationCheck3(t *testing.T, r Checker3) {
+	r.Check3(t)
+}
+
+func (test *TestCase[T]) Check3(t *testing.T) {
+	result, err := r.Remove(test.List, test.Index)
+	if err != nil {
+		t.Errorf("%s: unexpected error: %v", test.Name, err)
+	}
+	if !equal(result, test.Expected) {
+		t.Errorf("%s: expected %v, got %v", test.Name, test.Expected, result)
+	}
+}
+func equal[T comparable](a, b []T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+type TestCase[T constraints.Ordered] struct {
 	Name     string
 	List     []T
 	Index    int
@@ -20,14 +50,7 @@ func TestRemoveInt(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := r.Remove(tt.List, tt.Index)
-		if err != nil {
-			t.Errorf("%s: unexpected error: %v", tt.Name, err)
-			continue
-		}
-		if !equal(result, tt.Expected) {
-			t.Errorf("%s: expected %v, got %v", tt.Name, tt.Expected, result)
-		}
+		realisationCheck3(t, &tt)
 	}
 
 	_, err := r.Remove([]int{1, 2, 3}, 5)
@@ -44,14 +67,7 @@ func TestRemoveFloat64(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := r.Remove(tt.List, tt.Index)
-		if err != nil {
-			t.Errorf("%s: unexpected error: %v", tt.Name, err)
-			continue
-		}
-		if !equal(result, tt.Expected) {
-			t.Errorf("%s: expected %v, got %v", tt.Name, tt.Expected, result)
-		}
+		realisationCheck3(t, &tt)
 	}
 
 	_, err := r.Remove([]float64{1.1, 2.2, 3.3}, 5)
@@ -68,30 +84,11 @@ func TestRemoveString(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := r.Remove(tt.List, tt.Index)
-		if err != nil {
-			t.Errorf("%s: unexpected error: %v", tt.Name, err)
-			continue
-		}
-		if !equal(result, tt.Expected) {
-			t.Errorf("%s: expected %v, got %v", tt.Name, tt.Expected, result)
-		}
+		realisationCheck3(t, &tt)
 	}
 
 	_, err := r.Remove([]string{"a", "b", "c"}, 5)
 	if err == nil || err.Error() != "error : Index out of range" {
 		t.Error("expected index out of range error, got:", err)
 	}
-}
-
-func equal[T comparable](a, b []T) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
 }
